@@ -21,9 +21,9 @@ int validarCodigo(char codigo[]){
     if(strlen(codigo) ==0 || strlen(codigo)>15)
     return 0;
 
-    for (i=0; codigo[i] != '\0'; i++){
-        if(isspace(codigo[i]))
-            return 0;
+    for(i = 0; codigo[i] != '\0'; i++){
+    if(!isalnum(codigo[i]))
+        return 0;
     }
     return 1;
 }
