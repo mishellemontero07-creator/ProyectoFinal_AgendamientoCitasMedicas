@@ -79,21 +79,29 @@ void guardarArchivo(Cita citas[], int total){
 void registrarCita(Cita citas[], int *total){
     Cita nuevaCita;
 
-    printf("\nEscriba el codigo de la cita: ");
-    fgets(nuevaCita.codigo,16,stdin);
-    quitarSL(nuevaCita.codigo);
+   printf("\nEscriba el codigo de la cita: ");
+fgets(nuevaCita.codigo, sizeof(nuevaCita.codigo), stdin);
 
-    if(!validarCodigo(nuevaCita.codigo)){
-        printf("Codigo invalido. Debe tener entre 1 y 15 caracteres y no contener espacios en blanco.\n");
-        return;
-    }
+/* Verificar si el usuario escribió más de 15 caracteres */
+if(strchr(nuevaCita.codigo, '\n') == NULL){
+    printf("Codigo invalido. No puede tener mas de 15 caracteres.\n");
+    limpiarBuffer();
+    return;
+}
+
+quitarSL(nuevaCita.codigo);
+
+if(!validarCodigo(nuevaCita.codigo)){
+    printf("Codigo invalido. Debe tener entre 1 y 15 caracteres y no contener espacios en blanco.\n");
+    return;
+}
     if(citaExistente(citas, *total, nuevaCita.codigo)){
         printf("Codigo de cita ya existe. Ingrese un codigo diferente.\n");
         return;
     }
 
     printf("Paciente: ");
-    fgets(nuevaCita.paciente,50,stdin);
+    fgets(nuevaCita.paciente, sizeof(nuevaCita.paciente), stdin);
     quitarSL(nuevaCita.paciente);
 
     printf("Especialidad: ");
