@@ -206,7 +206,7 @@ for(i=0;i<total;i++){
             return;
         }
     if (horarioOcupado(citas, total, citas[i].fecha, citas[i].hora, i)){
-        printf("El horario ya está ocupado.\n")
+        printf("El horario ya está ocupado.\n");
         return;
     }
     printf("Actualizada correctamente.\n");
