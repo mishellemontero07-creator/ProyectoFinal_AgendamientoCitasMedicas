@@ -209,7 +209,7 @@ for(i=0;i<total;i++){
         printf("El horario ya está ocupado.\n");
         return;
     }
-    printf("Actualizada correctamente.\n")
+    printf("Actualizada correctamente.\n");
     return;
     
 }
