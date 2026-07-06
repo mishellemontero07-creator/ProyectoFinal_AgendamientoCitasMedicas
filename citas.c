@@ -103,10 +103,18 @@ if(!validarCodigo(nuevaCita.codigo)){
     printf("Paciente: ");
     fgets(nuevaCita.paciente, sizeof(nuevaCita.paciente), stdin);
     quitarSL(nuevaCita.paciente);
+    if(!validarTexto(nuevaCita.paciente)){
+    printf("El nombre del paciente no puede estar vacio.\n");
+    return;
+}
 
     printf("Especialidad: ");
     fgets(nuevaCita.especialidad,50,stdin);
     quitarSL(nuevaCita.especialidad);
+   if(!validarTexto(nuevaCita.especialidad)){
+    printf("La especialidad no puede estar vacia.\n");
+    return;
+}
 
 
     printf("Fecha DD/MM/AAAA: ");
@@ -139,6 +147,10 @@ if(!validarCodigo(nuevaCita.codigo)){
     printf("Medico: ");
     fgets(nuevaCita.medico,50,stdin);
     quitarSL(nuevaCita.medico);
+    if(!validarTexto(nuevaCita.medico)){
+    printf("El nombre del medico no puede estar vacio.\n");
+    return;
+}
 
     citas[*total] = nuevaCita;
     (*total)++;

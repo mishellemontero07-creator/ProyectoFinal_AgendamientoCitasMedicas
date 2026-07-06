@@ -9,5 +9,6 @@ void quitarSL (char cadena[]);
 int validarCodigo(char codigo[]);
 int validarFecha(char fecha[]);
 int validarHora (char hora[]);
+int validarTexto(char texto[]);
 
 #endif

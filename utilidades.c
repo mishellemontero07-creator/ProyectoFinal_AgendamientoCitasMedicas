@@ -15,17 +15,26 @@ void quitarSL (char cadena[]){
 
 // Validacion de codigo, fecha y hora
 int validarCodigo(char codigo[]){
-
-// Validar que el codigo no este vacio, que no tenga mas de 15 caracteres y que no tenga espacios en blanco
     int i;
-    if(strlen(codigo) ==0 || strlen(codigo)>15)
-    return 0;
+    int tieneLetra = 0;
+    int tieneNumero = 0;
+
+    if(strlen(codigo) == 0 || strlen(codigo) > 15)
+        return 0;
 
     for(i = 0; codigo[i] != '\0'; i++){
-    if(!isalnum(codigo[i]))
-        return 0;
+
+        if(!isalnum(codigo[i]))
+            return 0;
+
+        if(isalpha(codigo[i]))
+            tieneLetra = 1;
+
+        if(isdigit(codigo[i]))
+            tieneNumero = 1;
     }
-    return 1;
+
+    return tieneLetra && tieneNumero;
 }
 
 int validarFecha(char fecha[]){
@@ -52,4 +61,7 @@ int validarHora(char hora[]){
     if(m<0 || m>59)
         return 0;
     return 1;
+}
+int validarTexto(char texto[]){
+    return strlen(texto) > 0;
 }
