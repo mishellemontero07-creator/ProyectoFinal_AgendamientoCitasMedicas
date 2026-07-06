@@ -75,3 +75,186 @@ void guardarArchivo(Cita citas[], int total){
     fclose(archivo);
     printf("Archivo guardado correctamente.\n");
 }
+// Funciones para el manejo de citas
+void registrarCita(Cita citas[], int *total){
+    Cita nuevaCita;
+
+    printf("\nEscriba el codigo de la cita: ");
+    fgets(nuevaCita.codigo,16,stdin);
+    quitarSL(nuevaCita.codigo);
+
+    if(!validarCodigo(nuevaCita.codigo)){
+        printf("Codigo invalido. Debe tener entre 1 y 15 caracteres y no contener espacios en blanco.\n");
+        return;
+    }
+    if(citaExistente(citas, *total, nuevaCita.codigo)){
+        printf("Codigo de cita ya existe. Ingrese un codigo diferente.\n");
+        return;
+    }
+
+    printf("Paciente: ");
+    fgets(nuevaCita.paciente,50,stdin);
+    quitarSL(nuevaCita.paciente);
+
+    printf("Especialidad: ");
+    fgets(nuevaCita.especialidad,50,stdin);
+    quitarSL(nuevaCita.especialidad);
+
+
+    printf("Fecha DD/MM/AAAA: ");
+    fgets(nuevaCita.fecha,11,stdin);
+    quitarSL(nuevaCita.fecha);
+
+    if(!validarFecha(nuevaCita.fecha)){
+        printf("Fecha invalida. Debe estar en formato DD/MM/AAAA y ser una fecha valida.\n");
+        return;
+    }
+
+    limpiarBuffer();
+
+    printf("Ingrese la Hora HH:MM (24 horas): ");
+    fgets(nuevaCita.hora,6,stdin);
+    quitarSL(nuevaCita.hora);
+
+    limpiarBuffer();
+
+    if(!validarHora(nuevaCita.hora)){
+        printf("Hora invalida. Debe estar en formato HH:MM y ser una hora valida.\n");
+        return;
+    }
+
+    if(horarioOcupado(citas, *total, nuevaCita.fecha, nuevaCita.hora, -1)){
+        printf("El horario ya está ocupado. Ingrese una hora diferente.\n");
+        return;
+    }
+
+    printf("Medico: ");
+    fgets(nuevaCita.medico,50,stdin);
+    quitarSL(nuevaCita.medico);
+
+    citas[*total] = nuevaCita;
+    (*total)++;
+    printf("\nCita registrada correctamente.\n");
+}
+
+void listarCitas(Cita citas[], int total){
+    int i;
+
+    printf("\n======Listado de Citas======\n");
+    for (i=0; i<total; i++){
+        printf("Codigo: %s\n", citas[i].codigo);
+        printf("Paciente: %s\n", citas[i].paciente);
+        printf("Especialidad: %s\n", citas[i].especialidad);
+        printf("Fecha: %s\n", citas[i].fecha);
+        printf("Hora: %s\n", citas[i].hora);
+        printf("Medico: %s\n", citas[i].medico);
+        printf("--------------------\n");
+    }
+
+}
+
+void buscarCita(Cita citas[], int total){
+    char dato[50];
+    int i;
+
+    printf("\nIngrese el codigo o nombre del paciente a buscar: ");
+    fgets(dato,50,stdin);
+    quitarSL(dato);
+
+    for(i=0;i<total; i++){
+        // Verificar si el codigo o nombre del paciente coincide con el dato ingresado
+        if(strcmp(citas[i].codigo,dato)==0 || strstr(citas[i].paciente,dato)!=NULL){
+            printf("\nCita encontrada:\n");
+            // Mostrar los datos de la cita encontrada
+            printf("\n%s | %s | %s | %s | %s | %s\n", 
+            citas[i].codigo,
+            citas[i].paciente,
+            citas[i].especialidad,
+            citas[i].fecha,
+            citas[i].hora,
+            citas[i].medico);
+        }
+    }
+}
+
+void actualizarCita(Cita citas[], int total){
+    char codigo[16];
+    int i;
+
+    printf("\nIngrese el codigo de la cita a actualizar: ");
+    fgets(codigo,16,stdin);
+    quitarSL(codigo);
+
+for(i=0;i<total;i++){
+    if(strcmp(citas[i].codigo,codigo)==0){
+        printf("Ingrese la nueva fecha DD/MM/AAAA: ");
+        fgets(citas[i].fecha,11,stdin);
+        quitarSL(citas[i].fecha);
+        limpiarBuffer();
+
+        if(!validarFecha(citas[i].fecha)){
+            printf("Fecha invalida. Debe estar en formato DD/MM/AAAA y ser una fecha valida.\n");
+            return;
+        }
+
+        printf("Ingrese la nueva hora HH:MM (24 horas): ");
+        fgets(citas[i].hora,6,stdin);
+        quitarSL(citas[i].hora);
+
+        if(!validarHora(citas[i].hora)){
+            printf("Hora invalida. Debe estar en formato HH:MM y ser una hora valida.\n");
+            return;
+        }
+    if (horarioOcupado(citas, total, citas[i].fecha, citas[i].hora, i)){
+        printf("El horario ya está ocupado.\n");
+        return;
+    }
+    printf("Actualizada correctamente.\n");
+    return;
+    
+}
+
+}
+    printf("Cita no encontrada.\n");
+}
+
+void eliminarCita(Cita citas[], int *total){
+    int i,j;
+    char codigo[16];
+    char confirmacion;
+
+    printf("\nIngrese el codigo de la cita a eliminar: ");
+    fgets(codigo,16,stdin);
+    quitarSL(codigo);
+
+    for(i=0; i<(*total);i++){
+        
+        if(strcmp(citas[i].codigo,codigo)==0){
+            printf("Cita encontrada:\n");
+            printf("%s | %s | %s | %s | %s | %s\n", 
+            citas[i].codigo,
+            citas[i].paciente,
+            citas[i].especialidad,
+            citas[i].fecha,
+            citas[i].hora,
+            citas[i].medico);
+            
+            printf("¿Está seguro que desea eliminar esta cita? (S/N): ");
+            scanf("%c",&confirmacion);
+            limpiarBuffer();
+
+            if(confirmacion=='S' || confirmacion=='s'){
+                for(j=i;j<*total-1;j++){
+                    citas[j]=citas[j+1];
+                }
+                (*total)--;
+                printf("Cita eliminada correctamente.\n");
+                return;
+            }else{
+                printf("Eliminación cancelada.\n");
+                return;
+            }
+        }
+    }
+    printf("Cita no encontrada.\n");
+}
